@@ -17,27 +17,28 @@
 
 # --- Python standard library ---
 from __future__ import unicode_literals
-import sys, os, shutil, time, random, hashlib, urlparse, json
+
+import os
 import pprint
+import shutil
+import sys
 
 # --- Kodi modules ---
-try:
-    import xbmc, xbmcgui
-except:
-    from utils_kodi_standalone import *
+import xbmc, xbmcgui, xbmcvfs
 
 # --- AEL modules ---
 # utils.py and utils_kodi.py must not depend on any other AEL module to avoid circular dependencies.
 
 # --- Constants ----------------------------------------------------------------------------------
-LOG_ERROR   = 0
+LOG_ERROR = 0
 LOG_WARNING = 1
-LOG_INFO    = 2
-LOG_VERB    = 3
-LOG_DEBUG   = 4
+LOG_INFO = 2
+LOG_VERB = 3
+LOG_DEBUG = 4
 
 # --- Internal globals ---------------------------------------------------------------------------
 current_log_level = LOG_INFO
+
 
 # ------------------------------------------------------------------------------------------------
 # Logging functions
@@ -47,10 +48,12 @@ def set_log_level(level):
 
     current_log_level = level
 
+
 def log_variable(var_name, var):
     if current_log_level < LOG_DEBUG: return
     log_text = 'AEL DUMP : Dumping variable "{}"\n{}'.format(var_name, pprint.pformat(var))
-    xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGERROR)
+    xbmc.log(log_text, level=xbmc.LOGERROR)
+
 
 # For Unicode stuff in Kodi log see http://forum.kodi.tv/showthread.php?tid=144677
 def log_debug(str_text):
@@ -59,73 +62,95 @@ def log_debug(str_text):
 
     # If str_text has type str then we assume it is utf-8 encoded.
     # This will fail if str_text has other encoding (latin, etc).
-    if isinstance(str_text, str): str_text = str_text.decode('utf-8')
+    if isinstance(str_text, str): str_text = str_text
 
     # At this point we are sure str_text is a unicode string.
     log_text = 'AEL DEBUG: ' + str_text
-    xbmc.log(log_text.encode('utf-8'), level = xbmc.LOGERROR)
+    xbmc.log(log_text, level=xbmc.LOGERROR)
+
 
 def log_verb(str_text):
     if current_log_level < LOG_VERB: return
-    if isinstance(str_text, str): str_text = str_text.decode('utf-8')
+    if isinstance(str_text, str): str_text = str_text
     log_text = 'AEL VERB : ' + str_text
-    xbmc.log(log_text.encode('utf-8'), level=xbmc.LOGERROR)
+    xbmc.log(log_text, level=xbmc.LOGERROR)
+
 
 def log_info(str_text):
     if current_log_level < LOG_INFO: return
-    if isinstance(str_text, str): str_text = str_text.decode('utf-8')
+    if isinstance(str_text, str): str_text = str_text
     log_text = 'AEL INFO : ' + str_text
-    xbmc.log(log_text.encode('utf-8'), level=xbmc.LOGERROR)
+    xbmc.log(log_text, level=xbmc.LOGERROR)
+
 
 def log_warning(str_text):
     if current_log_level < LOG_WARNING: return
-    if isinstance(str_text, str): str_text = str_text.decode('utf-8')
+    if isinstance(str_text, str): str_text = str_text
     log_text = 'AEL WARN : ' + str_text
-    xbmc.log(log_text.encode('utf-8'), level=xbmc.LOGERROR)
+    xbmc.log(log_text, level=xbmc.LOGERROR)
+
 
 def log_error(str_text):
     # Errors are always printed to log.
-    if isinstance(str_text, str): str_text = str_text.decode('utf-8')
+    if isinstance(str_text, str): str_text = str_text
     log_text = 'AEL ERROR: ' + str_text
-    xbmc.log(log_text.encode('utf-8'), level=xbmc.LOGERROR)
+    xbmc.log(log_text, level=xbmc.LOGERROR)
 
-# ------------------------------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
 # Kodi notifications and dialogs
-# ------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+#
 # Displays a modal dialog with an OK button. Dialog can have up to 3 rows of text, however first
 # row is multiline.
 # Call examples:
 #  1) ret = kodi_dialog_OK('Launch ROM?')
 #  2) ret = kodi_dialog_OK('Launch ROM?', title = 'AEL - Launcher')
-def kodi_dialog_OK(text, title = 'Advanced Emulator Launcher'):
+#
+def kodi_dialog_OK(text, title='Advanced Emulator Launcher'):
     xbmcgui.Dialog().ok(title, text)
 
+
 # Returns True is YES was pressed, returns False if NO was pressed or dialog canceled.
-def kodi_dialog_yesno(text, title = 'Advanced Emulator Launcher'):
+def kodi_dialog_yesno(text, title='Advanced Emulator Launcher'):
     return xbmcgui.Dialog().yesno(title, text)
 
+
 # Returns True is YES was pressed, returns False if NO was pressed or dialog canceled.
-def kodi_dialog_yesno_custom(text, yeslabel_str, nolabel_str, title = 'Advanced Emulator Launcher'):
-    return xbmcgui.Dialog().yesno(title, text, yeslabel = yeslabel_str, nolabel = nolabel_str)
+def kodi_dialog_yesno_custom(text, yeslabel_str, nolabel_str, title='Advanced Emulator Launcher'):
+    return xbmcgui.Dialog().yesno(title, text, yeslabel=yeslabel_str, nolabel=nolabel_str)
 
-def kodi_dialog_yesno_timer(text, timer_ms = 30000, title = 'Advanced Emulator Launcher'):
-    return xbmcgui.Dialog().yesno(title, text, autoclose = timer_ms)
 
+def kodi_dialog_yesno_timer(text, timer_ms=30000, title='Advanced Emulator Launcher'):
+    return xbmcgui.Dialog().yesno(title, text, autoclose=timer_ms)
+
+
+#
 # Displays a small box in the low right corner
-def kodi_notify(text, title = 'Advanced Emulator Launcher', time = 5000):
+#
+def kodi_notify(text, title='Advanced Emulator Launcher', time=5000):
+    # --- Old way ---
+    # xbmc.executebuiltin("XBMC.Notification(%s,%s,%s,%s)" % (title, text, time, ICON_IMG_FILE_PATH))
+
+    # --- New way ---
     xbmcgui.Dialog().notification(title, text, xbmcgui.NOTIFICATION_INFO, time)
 
-def kodi_notify_warn(text, title = 'Advanced Emulator Launcher warning', time = 7000):
+
+def kodi_notify_warn(text, title='Advanced Emulator Launcher warning', time=7000):
     xbmcgui.Dialog().notification(title, text, xbmcgui.NOTIFICATION_WARNING, time)
 
-# Do not use this function much because it is the same icon displayed when Python fails
-# with an exception and that may confuse the user.
-def kodi_notify_error(text, title = 'Advanced Emulator Launcher error', time = 7000):
+
+#
+# Do not use this function much because it is the same icon as when Python fails, and that may confuse the user.
+#
+def kodi_notify_error(text, title='Advanced Emulator Launcher error', time=7000):
     xbmcgui.Dialog().notification(title, text, xbmcgui.NOTIFICATION_ERROR, time)
+
 
 def kodi_refresh_container():
     log_debug('kodi_refresh_container()')
     xbmc.executebuiltin('Container.Refresh')
+
 
 # Progress dialog that can be closed and reopened.
 # Messages in the dialog are always remembered.
@@ -138,23 +163,23 @@ class KodiProgressDialog(object):
         self.dialog_active = False
         self.progressDialog = xbmcgui.DialogProgress()
 
-    def startProgress(self, message1, num_steps = 100, message2 = None):
+    def startProgress(self, message1, num_steps=100, message2=None):
         self.num_steps = num_steps
         self.progress = 0
         self.dialog_active = True
         self.message1 = message1
         self.message2 = message2
         if self.message2:
-            self.progressDialog.create(self.title, self.message1, self.message2)
+            self.progressDialog.create(self.title, self.message1 + "/n" + self.message2)
         else:
             # The ' ' is to avoid a bug in Kodi progress dialog that keeps old messages 2
             # if an empty string is passed.
-            self.progressDialog.create(self.title, self.message1, ' ')
-        self.progressDialog.update(self.progress)
+            self.progressDialog.create(self.title, self.message1)
+        self.progressDialog.update(int(self.progress))
 
     # Update progress and optionally update messages as well.
     # If not messages specified then keep current message/s
-    def updateProgress(self, step_index, message1 = None, message2 = None):
+    def updateProgress(self, step_index, message1=None, message2=None):
         self.progress = (step_index * 100) / self.num_steps
         # Update both messages
         if message1 and message2:
@@ -164,31 +189,31 @@ class KodiProgressDialog(object):
         elif message1:
             self.message1 = message1
             self.message2 = None
-            self.progressDialog.update(self.progress, message1, ' ')
+            self.progressDialog.update(int(self.progress), message1)
             return
         if self.message2:
-            self.progressDialog.update(self.progress, self.message1, self.message2)
+            self.progressDialog.update(int(self.progress), self.message1 + "/n" + self.message2)
         else:
             # The ' ' is to avoid a bug in Kodi progress dialog that keeps old messages 2
             # if an empty string is passed.
-            self.progressDialog.update(self.progress, self.message1, ' ')
+            self.progressDialog.update(int(self.progress), self.message1)
 
     # Update dialog message but keep same progress. message2 is removed if any.
     def updateMessage(self, message1):
         self.message1 = message1
         self.message2 = None
-        self.progressDialog.update(self.progress, self.message1, ' ')
+        self.progressDialog.update(int(self.progress), self.message1)
 
     # Update message2 and keeps same progress and message1
     def updateMessage2(self, message2):
         self.message2 = message2
-        self.progressDialog.update(self.progress, self.message1, self.message2)
+        self.progressDialog.update(int(self.progress), self.message1 + "/n" + self.message2)
 
     # Update dialog message but keep same progress.
     def updateMessages(self, message1, message2):
         self.message1 = message1
         self.message2 = message2
-        self.progressDialog.update(self.progress, message1, message2)
+        self.progressDialog.update(int(self.progress), message1 + "/n" + message2)
 
     def isCanceled(self):
         # If the user pressed the cancel button before then return it now.
@@ -217,13 +242,14 @@ class KodiProgressDialog(object):
     # when it was closed.
     def reopen(self):
         if self.message2:
-            self.progressDialog.create(self.title, self.message1, self.message2)
+            self.progressDialog.create(self.title, self.message1 + "/n" + self.message2)
         else:
             # The ' ' is to avoid a bug in Kodi progress dialog that keeps old messages 2
             # if an empty string is passed.
-            self.progressDialog.create(self.title, self.message1, ' ')
-        self.progressDialog.update(self.progress)
+            self.progressDialog.create(self.title, self.message1 + "/n" + ' ')
+        self.progressDialog.update(int(self.progress))
         self.dialog_active = True
+
 
 # To be used as a base class.
 class KodiProgressDialog_Chrisism(object):
@@ -235,43 +261,46 @@ class KodiProgressDialog_Chrisism(object):
     def _startProgressPhase(self, title, message):
         self.progressDialog.create(title, message)
 
-    def _updateProgress(self, progress, message1 = None, message2 = None):
+    def _updateProgress(self, progress, message1=None, message2=None):
         self.progress = progress
         if not self.verbose:
-            self.progressDialog.update(progress)
+            self.progressDialog.update(int(progress))
         else:
-            self.progressDialog.update(progress, message1, message2)
+            self.progressDialog.update(int(progress), message1 + "/n" + message2)
 
-    def _updateProgressMessage(self, message1, message2 = None):
+    def _updateProgressMessage(self, message1, message2=None):
         if not self.verbose: return
 
-        self.progressDialog.update(self.progress, message1, message2)
+        self.progressDialog.update(int(self.progress), message1 + "/n" + message2)
 
     def _isProgressCanceled(self):
         return self.progressDialog.iscanceled()
 
-    def _endProgressPhase(self, canceled = False):
+    def _endProgressPhase(self, canceled=False):
         if not canceled: self.progressDialog.update(100)
         self.progressDialog.close()
+
 
 # -------------------------------------------------------------------------------------------------
 # Kodi error reporting
 # -------------------------------------------------------------------------------------------------
-KODI_MESSAGE_NONE        = 100
+KODI_MESSAGE_NONE = 100
 # Kodi notifications must be short.
-KODI_MESSAGE_NOTIFY      = 200
+KODI_MESSAGE_NOTIFY = 200
 KODI_MESSAGE_NOTIFY_WARN = 300
 # Kodi OK dialog to display a message.
-KODI_MESSAGE_DIALOG      = 400
+KODI_MESSAGE_DIALOG = 400
+
 
 # If status_dic['status'] is True then everything is OK. If status_dic['status'] is False,
 # then display the notification.
 def kodi_new_status_dic(message):
     return {
-        'status' : True,
-        'dialog' : KODI_MESSAGE_NOTIFY,
-        'msg'    : message,
+        'status': True,
+        'dialog': KODI_MESSAGE_NOTIFY,
+        'msg': message,
     }
+
 
 def kodi_display_user_message(op_dic):
     if op_dic['dialog'] == KODI_MESSAGE_NONE:
@@ -282,6 +311,7 @@ def kodi_display_user_message(op_dic):
         kodi_notify(op_dic['msg'])
     elif op_dic['dialog'] == KODI_MESSAGE_DIALOG:
         kodi_dialog_OK(op_dic['msg'])
+
 
 # -------------------------------------------------------------------------------------------------
 # Kodi specific stuff
@@ -304,7 +334,7 @@ def kodi_display_user_message(op_dic):
 # cache_file_path is a Unicode string.
 #
 def kodi_get_cached_image_FN(image_path):
-    THUMBS_CACHE_PATH = os.path.join(xbmc.translatePath('special://profile/' ), 'Thumbnails')
+    THUMBS_CACHE_PATH = os.path.join(xbmcvfs.translatePath('special://profile/'), 'Thumbnails')
 
     # --- Get the Kodi cached image ---
     # This function return the cache file base name
@@ -312,6 +342,7 @@ def kodi_get_cached_image_FN(image_path):
     cache_file_path = os.path.join(THUMBS_CACHE_PATH, base_name[0], base_name)
 
     return cache_file_path
+
 
 #
 # Updates Kodi image cache for the image provided in img_path.
@@ -347,8 +378,8 @@ def kodi_update_image_cache(img_path):
     log_debug('kodi_update_image_cache() into    {0}'.format(cached_thumb))
     fs_encoding = sys.getfilesystemencoding()
     log_debug('kodi_update_image_cache() fs_encoding = "{0}"'.format(fs_encoding))
-    encoded_img_path = img_path.encode(fs_encoding, 'ignore')
-    encoded_cached_thumb = cached_thumb.encode(fs_encoding, 'ignore')
+    encoded_img_path = img_path
+    encoded_cached_thumb = cached_thumb
     try:
         shutil.copy2(encoded_img_path, encoded_cached_thumb)
     except OSError:
@@ -359,64 +390,16 @@ def kodi_update_image_cache(img_path):
     # >> Is this really needed?
     # xbmc.executebuiltin('XBMC.ReloadSkin()')
 
+
 def kodi_toogle_fullscreen():
-    kodi_jsonrpc_dict('Input.ExecuteAction', {'action' : 'togglefullscreen'})
+    # Frodo and up compatible
+    xbmc.executeJSONRPC(
+        '{"jsonrpc":"2.0", "method":"Input.ExecuteAction", "params":{"action":"togglefullscreen"}, "id":"1"}')
 
-def kodi_get_screensaver_mode():
-    r_dic = kodi_jsonrpc_dict('Settings.getSettingValue', {'setting' : 'screensaver.mode'})
-    screensaver_mode = r_dic['value']
-    return screensaver_mode
 
-g_screensaver_mode = None # Global variable to store screensaver status.
-def kodi_disable_screensaver():
-    global g_screensaver_mode
-    g_screensaver_mode = kodi_get_screensaver_mode()
-    log_debug('kodi_disable_screensaver() g_screensaver_mode "{}"'.format(g_screensaver_mode))
-    p_dic = {
-        'setting' : 'screensaver.mode',
-        'value' : '',
-    }
-    kodi_jsonrpc_dict('Settings.setSettingValue', p_dic)
-    log_debug('kodi_disable_screensaver() Screensaver disabled.')
-
-# kodi_disable_screensaver() must be called before this function or bad things will happen.
-def kodi_restore_screensaver():
-    if g_screensaver_mode is None:
-        log_error('kodi_disable_screensaver() must be called before kodi_restore_screensaver()')
-        raise RuntimeError
-    log_debug('kodi_restore_screensaver() Screensaver mode "{}"'.format(g_screensaver_mode))
-    p_dic = {
-        'setting' : 'screensaver.mode',
-        'value' : g_screensaver_mode,
-    }
-    kodi_jsonrpc_dict('Settings.setSettingValue', p_dic)
-    log_debug('kodi_restore_screensaver() Restored previous screensaver status.')
-
-def kodi_jsonrpc_dict(method_str, params_dic, verbose = False):
-    params_str = json.dumps(params_dic)
-    if verbose:
-        log_debug('kodi_jsonrpc_dict() method_str "{}"'.format(method_str))
-        log_debug('kodi_jsonrpc_dict() params_dic = \n{}'.format(pprint.pformat(params_dic)))
-        log_debug('kodi_jsonrpc_dict() params_str "{}"'.format(params_str))
-
-    # --- Do query ---
-    header = '"id" : 1, "jsonrpc" : "2.0"'
-    query_str = '{{{}, "method" : "{}", "params" : {} }}'.format(header, method_str, params_str)
-    response_json_str = xbmc.executeJSONRPC(query_str)
-
-    # --- Parse JSON response ---
-    response_dic = json.loads(response_json_str)
-    if 'error' in response_dic:
-        result_dic = response_dic['error']
-        log_warning('kodi_jsonrpc_dict() JSONRPC ERROR {}'.format(result_dic['message']))
-    else:
-        result_dic = response_dic['result']
-    if verbose:
-        log_debug('kodi_jsonrpc_dict() result_dic = \n{}'.format(pprint.pformat(result_dic)))
-
-    return result_dic
-
+#
 # Displays a text window and requests a monospaced font.
+#
 def kodi_display_text_window_mono(window_title, info_text):
     log_debug('Setting Window(10000) Property "FontWidth" = "monospaced"')
     xbmcgui.Window(10000).setProperty('FontWidth', 'monospaced')
@@ -424,6 +407,9 @@ def kodi_display_text_window_mono(window_title, info_text):
     log_debug('Setting Window(10000) Property "FontWidth" = "proportional"')
     xbmcgui.Window(10000).setProperty('FontWidth', 'proportional')
 
+
+#
 # Displays a text window with a proportional font (default).
+#
 def kodi_display_text_window(window_title, info_text):
     xbmcgui.Dialog().textviewer(window_title, info_text)

@@ -16,25 +16,18 @@
 
 # --- Python standard library ---
 from __future__ import unicode_literals
-import os
-import time
+
+from resources.assets import *
+# --- AEL packages ---
+from resources.disk_IO import *
+from resources.platforms import *
+from resources.utils import *
+
 
 # --- XML stuff ---
 # ~~~ cElementTree sometimes fails to parse XML in Kodi's Python interpreter... I don't know why
 # import xml.etree.cElementTree as ET
 
-# ~~~ Using ElementTree seems to solve the problem
-import xml.etree.ElementTree as ET
-
-# --- Kodi stuff ---
-import xbmc, xbmcgui, xbmcplugin, xbmcaddon
-
-# --- AEL packages ---
-from constants import *
-from utils import *
-from disk_IO import *
-from assets import *
-from platforms import *
 
 # -------------------------------------------------------------------------------------------------
 # Exports launchers to an XML file.
@@ -59,6 +52,7 @@ def autoconfig_export_category_str_list(category, str_list):
     str_list.append(XML_text('s_clearlogo', category['s_clearlogo']))
     str_list.append(XML_text('s_trailer', category['s_trailer']))
     str_list.append('</category>\n')
+
 
 #
 # Helper function to export a single Launcher.
@@ -119,6 +113,7 @@ def autoconfig_export_launcher_str_list(launcher, category_name, str_list):
     str_list.append(XML_text('s_trailer', launcher['s_trailer']))
     str_list.append('</launcher>\n')
 
+
 #
 # Export all Categories and Launchers.
 # Check if the output XML file exists (and show a warning dialog if so) is done in caller.
@@ -132,14 +127,14 @@ def autoconfig_export_all(categories, launchers, export_FN):
 
     # --- Export Categories ---
     # >> Data which is not string must be converted to string
-    for categoryID in sorted(categories, key = lambda x : categories[x]['m_name']):
+    for categoryID in sorted(categories, key=lambda x: categories[x]['m_name']):
         category = categories[categoryID]
         log_verb('autoconfig_export_all() Category "{0}" (ID "{1}")'.format(category['m_name'], categoryID))
         autoconfig_export_category_str_list(category, str_list)
 
     # --- Export Launchers and add XML tail ---
     # >> Data which is not string must be converted to string
-    for launcherID in sorted(launchers, key = lambda x : launchers[x]['m_name']):
+    for launcherID in sorted(launchers, key=lambda x: launchers[x]['m_name']):
         launcher = launchers[launcherID]
         if launcher['categoryID'] in categories:
             category_name = categories[launcher['categoryID']]['m_name']
@@ -154,6 +149,7 @@ def autoconfig_export_all(categories, launchers, export_FN):
 
     # >> Export file. Strings in the list are Unicode. Encode to UTF-8 when writing to file.
     fs_write_str_list_to_file(str_list, export_FN)
+
 
 #
 # Export a single Launcher XML configuration.
@@ -182,6 +178,7 @@ def autoconfig_export_launcher(launcher, export_FN, categories):
     # >> Export file. Strings in the list are Unicode. Encode to UTF-8 when writing to file.
     fs_write_str_list_to_file(str_list, export_FN)
 
+
 #
 # Export a single Category XML configuration.
 # Check if the output XML file exists (and show a warning dialog if so) is done in caller.
@@ -201,67 +198,70 @@ def autoconfig_export_category(category, export_FN):
     # >> Export file. Strings in the list are Unicode. Encode to UTF-8 when writing to file.
     fs_write_str_list_to_file(str_list, export_FN)
 
+
 # -------------------------------------------------------------------------------------------------
 # Import AEL launcher configuration
 # -------------------------------------------------------------------------------------------------
 def autoconfig_get_default_import_category():
     return {
-        'name' : '',
-        'year' : '',
-        'genre' : '',
-        'developer' : '',
-        'rating' : '',
-        'plot' : '',
-        'Asset_Prefix' : '',
-        's_icon' : '',
-        's_fanart' : '',
-        's_banner' : '',
-        's_poster' : '',
-        's_clearlogo' : '',
-        's_trailer' : '',
+        'name': '',
+        'year': '',
+        'genre': '',
+        'developer': '',
+        'rating': '',
+        'plot': '',
+        'Asset_Prefix': '',
+        's_icon': '',
+        's_fanart': '',
+        's_banner': '',
+        's_poster': '',
+        's_clearlogo': '',
+        's_trailer': '',
     }
+
 
 def autoconfig_get_default_import_launcher():
     return {
-        'name' : '',
-        'category' : 'root_category',
-        'Launcher_NFO' : '',
-        'year' : '',
-        'genre' : '',
-        'developer' : '',
-        'rating' : '',
-        'plot' : '',
-        'platform' : 'Unknown',
-        'application' : '',
-        'args' : [],
-        'args_extra' : [],
-        'ROM_path' : '',
-        'ROM_ext' : '',
-        'ROM_extra_path' : '',
-        'Options' : '',
-        'ROM_asset_path' : '',
-        'path_3dbox' : '',
-        'path_title' : '',
-        'path_snap' : '',
-        'path_boxfront' : '',
-        'path_boxback' : '',
-        'path_cartridge' : '',
-        'path_fanart' : '',
-        'path_banner' : '',
-        'path_clearlogo' : '',
-        'path_flyer' : '',
-        'path_map' : '',
-        'path_manual' : '',
-        'path_trailer' : '',
-        'Asset_Prefix' : '',
-        's_icon' : '',
-        's_fanart' : '',
-        's_banner' : '',
-        's_poster' : '',
-        's_clearlogo' : '',
-        's_controller' : '',
-        's_trailer' : '',
+        'name': '',
+        'category': 'root_category',
+        'Launcher_NFO': '',
+        'year': '',
+        'genre': '',
+        'developer': '',
+        'rating': '',
+        'plot': '',
+        'platform': 'Unknown',
+        'application': '',
+        'args': [],
+        'args_extra': [],
+        'ROM_path': '',
+        'ROM_ext': '',
+        'ROM_extra_path': '',
+        'Options': '',
+        'ROM_asset_path': '',
+        'path_3dbox': '',
+        'path_title': '',
+        'path_snap': '',
+        'path_boxfront': '',
+        'path_boxback': '',
+        'path_cartridge': '',
+        'path_fanart': '',
+        'path_banner': '',
+        'path_clearlogo': '',
+        'path_flyer': '',
+        'path_map': '',
+        'path_manual': '',
+        'path_trailer': '',
+        'Asset_Prefix': '',
+        's_icon': '',
+        's_fanart': '',
+        's_banner': '',
+        's_poster': '',
+        's_clearlogo': '',
+        's_controller': '',
+        's_trailer': '',
     }
+
 
 def autoconfig_search_all_by_name(i_launcher, categories, launchers):
     cat_name = i_launcher['category']
@@ -279,7 +279,7 @@ def autoconfig_search_all_by_name(i_launcher, categories, launchers):
     # >> If the category was found then search the launcher inside that category.
     if s_category:
         s_launcher = None
-        for launcherID, launcher in launchers.iteritems():
+        for launcherID, launcher in launchers.items():
             if s_category != launcher['categoryID']: continue
             if laun_name == launcher['m_name']:
                 s_launcher = launcher['id']
@@ -289,6 +289,7 @@ def autoconfig_search_all_by_name(i_launcher, categories, launchers):
         s_launcher = None
 
     return (s_category, s_launcher)
+
 
 def autoconfig_search_category_by_name(i_category, categories):
     cat_name = i_category['name']
@@ -302,6 +303,7 @@ def autoconfig_search_category_by_name(i_category, categories):
                 break
 
     return s_category
+
 
 # def autoconfig_search_launcher_by_name(launcher_name):
 #     s_launcher = None
@@ -340,7 +342,7 @@ def autoconfig_import_launchers(CATEGORIES_FILE_PATH, ROMS_DIR, categories, laun
                 # >> By default read strings
                 xml_text = root_child.text if root_child.text is not None else ''
                 xml_text = text_unescape_XML(xml_text)
-                xml_tag  = root_child.tag
+                xml_tag = root_child.tag
                 if __debug_xml_parser: log_debug('>>> "{0:<11s}" --> "{1}"'.format(xml_tag, xml_text))
                 category_temp[xml_tag] = xml_text
             # --- Add category to categories dictionary ---
@@ -352,7 +354,7 @@ def autoconfig_import_launchers(CATEGORIES_FILE_PATH, ROMS_DIR, categories, laun
                 # >> By default read strings
                 xml_text = root_child.text if root_child.text is not None else ''
                 xml_text = text_unescape_XML(xml_text)
-                xml_tag  = root_child.tag
+                xml_tag = root_child.tag
                 if __debug_xml_parser: log_debug('>>> "{0:<11s}" --> "{1}"'.format(xml_tag, xml_text))
 
                 # Transform list datatype. Only add to the list if string is non empty.
@@ -406,7 +408,7 @@ def autoconfig_import_launchers(CATEGORIES_FILE_PATH, ROMS_DIR, categories, laun
     for i_launcher in imported_launchers_list:
         log_info('Processing Launcher "{0}"'.format(i_launcher['name']))
         log_info('      with Category "{0}"'.format(i_launcher['category']))
-        
+
         # >> Search category/launcher database to check if imported launcher/category exist.
         (s_categoryID, s_launcherID) = autoconfig_search_all_by_name(i_launcher, categories, launchers)
         log_debug('s_launcher = "{0}"'.format(s_launcherID))
@@ -464,7 +466,9 @@ def autoconfig_import_launchers(CATEGORIES_FILE_PATH, ROMS_DIR, categories, laun
             if ret < 1: continue
 
             # >> Import launcher. Only import fields that are not empty strings.
-            autoconfig_import_launcher(ROMS_DIR, categories, launchers, s_categoryID, s_launcherID, i_launcher, import_FN)
+            autoconfig_import_launcher(ROMS_DIR, categories, launchers, s_categoryID, s_launcherID, i_launcher,
+                                       import_FN)
+
 
 #
 # Imports/edits a category with an extenal XML config file.
@@ -561,16 +565,16 @@ def autoconfig_import_category(categories, categoryID, i_category, import_FN):
         # >> Current image if found
         current_FN = FileName(categories[categoryID][AInfo.key])
         if current_FN.exists():
-            asset_listitem = xbmcgui.ListItem(label = 'Current image', label2 = current_FN.getPath())
-            asset_listitem.setArt({'icon' : current_FN.getPath()})
+            asset_listitem = xbmcgui.ListItem(label='Current image', label2=current_FN.getPath())
+            asset_listitem.setArt({'icon': current_FN.getPath()})
             listitems_list.append(asset_listitem)
             listitems_asset_paths.append(current_FN.getPath())
         # >> Image in <s_icon>, <s_fanart>, ... tags if found
         tag_asset_FN = FileName(i_category[AInfo.key])
         if tag_asset_FN.exists():
-            asset_listitem = xbmcgui.ListItem(label = 'XML <{0}> image'.format(AInfo.key),
-                                              label2 = tag_asset_FN.getPath())
-            asset_listitem.setArt({'icon' : tag_asset_FN.getPath()})
+            asset_listitem = xbmcgui.ListItem(label='XML <{0}> image'.format(AInfo.key),
+                                              label2=tag_asset_FN.getPath())
+            asset_listitem.setArt({'icon': tag_asset_FN.getPath()})
             listitems_list.append(asset_listitem)
             listitems_asset_paths.append(tag_asset_FN.getPath())
         # >> Images found in XML configuration via <Asset_Prefix> tag if found
@@ -579,9 +583,9 @@ def autoconfig_import_category(categories, categoryID, i_category, import_FN):
             log_debug('asset_file_name "{0}"'.format(asset_file_name))
             asset_FN = FileName(asset_file_name)
             asset_listitem = xbmcgui.ListItem(
-                label = 'Asset_Prefix #{0} "{1}"'.format(image_count, asset_FN.getBase()),
-                label2 = asset_file_name)
-            asset_listitem.setArt({'icon' : asset_file_name})
+                label='Asset_Prefix #{0} "{1}"'.format(image_count, asset_FN.getBase()),
+                label2=asset_file_name)
+            asset_listitem.setArt({'icon': asset_file_name})
             listitems_list.append(asset_listitem)
             listitems_asset_paths.append(asset_FN.getPath())
             image_count += 1
@@ -590,19 +594,20 @@ def autoconfig_import_category(categories, categoryID, i_category, import_FN):
             log_debug('listitems_list is empty. Keeping {0} as it was.'.format(AInfo.name))
             continue
         # >> No image
-        asset_listitem = xbmcgui.ListItem(label = 'No image')
-        asset_listitem.setArt({'icon' : 'DefaultAddonNone.png'})
+        asset_listitem = xbmcgui.ListItem(label='No image')
+        asset_listitem.setArt({'icon': 'DefaultAddonNone.png'})
         listitems_list.append(asset_listitem)
         listitems_asset_paths.append('')
 
         # >> Show image selection select() dialog
         title_str = 'Category "{0}". Choose {1} ...'.format(i_category['name'], AInfo.name)
-        ret_idx = xbmcgui.Dialog().select(title_str, list = listitems_list, useDetails = True)
+        ret_idx = xbmcgui.Dialog().select(title_str, list=listitems_list, useDetails=True)
         if ret_idx < 0: return
 
         # >> Set asset field
         categories[categoryID][AInfo.key] = listitems_asset_paths[ret_idx]
         log_verb('Set category artwork "{0}" = "{1}"'.format(AInfo.key, listitems_asset_paths[ret_idx]))
+
 
 #
 # Imports/Edits a launcher with an extenal XML config file.
@@ -610,8 +615,8 @@ def autoconfig_import_category(categories, categoryID, i_category, import_FN):
 def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, launcherID, i_launcher, import_FN):
     log_debug('autoconfig_import_launcher() categoryID = {0}'.format(categoryID))
     log_debug('autoconfig_import_launcher() launcherID = {0}'.format(launcherID))
-    Launcher_NFO_meta = {'year' : '', 'genre' : '', 'developer' : '', 'rating' : '', 'plot' : ''}
-    XML_meta          = {'year' : '', 'genre' : '', 'developer' : '', 'rating' : '', 'plot' : ''}
+    Launcher_NFO_meta = {'year': '', 'genre': '', 'developer': '', 'rating': '', 'plot': ''}
+    XML_meta = {'year': '', 'genre': '', 'developer': '', 'rating': '', 'plot': ''}
 
     # --- Launcher metadata ---
     if i_launcher['name']:
@@ -699,7 +704,7 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
         else:
             kodi_dialog_OK(
                 'Unrecognised platform name "{0}".'.format(platform),
-                title = 'Launcher "{0}"'.format(i_launcher['name']))
+                title='Launcher "{0}"'.format(i_launcher['name']))
             log_debug('Unrecognised platform name "{0}".'.format(platform))
         launchers[launcherID]['platform'] = platform
         log_debug('Imported platform "{0}"'.format(platform))
@@ -711,7 +716,7 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
             log_debug('Application NOT found.')
             kodi_dialog_OK(
                 'Application "{0}" not found'.format(app_FN.getPath()),
-                title = 'Launcher "{0}"'.format(i_launcher['name']))
+                title='Launcher "{0}"'.format(i_launcher['name']))
         else:
             log_debug('Application found.')
         launchers[launcherID]['application'] = i_launcher['application']
@@ -761,7 +766,7 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
             log_debug('ROM path NOT found.')
             kodi_dialog_OK(
                 'ROM path "{}" not found'.format(rompath.getPath()),
-                title = 'Launcher "{}"'.format(i_launcher['name']))
+                title='Launcher "{}"'.format(i_launcher['name']))
         else:
             log_debug('ROM_path found.')
         launchers[launcherID]['rompath'] = i_launcher['ROM_path']
@@ -779,7 +784,7 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
             log_debug('ROM_extra_path NOT found.')
             kodi_dialog_OK(
                 'ROM path "{}" not found'.format(rompath.getPath()),
-                title = 'Launcher "{}"'.format(i_launcher['name']))
+                title='Launcher "{}"'.format(i_launcher['name']))
         else:
             log_debug('ROM_extra_path found.')
         launchers[launcherID]['romextrapath'] = i_launcher['ROM_extra_path']
@@ -787,12 +792,12 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
 
     # --- Launcher options ---
     if i_launcher['Options']:
-        opt_string = unicode(i_launcher['Options']).strip()
+        opt_string = str(i_launcher['Options']).strip()
         log_debug('Imported Options "{0}"'.format(opt_string))
         # >> Parse options
         raw_opt_list = opt_string.split(',')
         opt_list = [w.strip() for w in raw_opt_list]
-        log_debug('Stripped options list {0}'.format(unicode(opt_list)))
+        log_debug('Stripped options list {0}'.format(str(opt_list)))
         launcher = launchers[launcherID]
         for option in opt_list:
             if option == 'Blocking':
@@ -833,7 +838,7 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
             log_debug('Not found ROM_asset_path "{0}"'.format(ROM_asset_path_FN.getPath()))
             ret = kodi_dialog_yesno(
                 'ROM asset path "{0}" not found. '.format(ROM_asset_path_FN.getPath()) +
-                'Create it?', title = 'Launcher "{0}"'.format(i_launcher['name']))
+                'Create it?', title='Launcher "{0}"'.format(i_launcher['name']))
             if ret:
                 log_debug('Creating dir "{0}"'.format(ROM_asset_path_FN.getPath()))
                 ROM_asset_path_FN.makedirs()
@@ -959,8 +964,8 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
         current_FN = FileName(launchers[launcherID][AInfo.key])
         if current_FN.exists():
             log_debug('Current asset found "{0}"'.format(current_FN.getPath()))
-            asset_listitem = xbmcgui.ListItem(label = 'Current image', label2 = current_FN.getPath())
-            asset_listitem.setArt({'icon' : current_FN.getPath()})
+            asset_listitem = xbmcgui.ListItem(label='Current image', label2=current_FN.getPath())
+            asset_listitem.setArt({'icon': current_FN.getPath()})
             listitems_list.append(asset_listitem)
             listitems_asset_paths.append(current_FN.getPath())
         else:
@@ -969,9 +974,9 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
         tag_asset_FN = FileName(i_launcher[AInfo.key])
         if tag_asset_FN.exists():
             log_debug('<{0}> tag found "{1}"'.format(AInfo.key, tag_asset_FN.getPath()))
-            asset_listitem = xbmcgui.ListItem(label = 'XML <{0}> image'.format(AInfo.key),
-                                              label2 = tag_asset_FN.getPath())
-            asset_listitem.setArt({'icon' : tag_asset_FN.getPath()})
+            asset_listitem = xbmcgui.ListItem(label='XML <{0}> image'.format(AInfo.key),
+                                              label2=tag_asset_FN.getPath())
+            asset_listitem.setArt({'icon': tag_asset_FN.getPath()})
             listitems_list.append(asset_listitem)
             listitems_asset_paths.append(tag_asset_FN.getPath())
         else:
@@ -981,9 +986,9 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
         for asset_file_name in asset_file_list:
             log_debug('Asset_Prefix found "{0}"'.format(asset_file_name))
             asset_FN = FileName(asset_file_name)
-            asset_listitem = xbmcgui.ListItem(label = 'Asset_Prefix #{0} "{1}"'.format(image_count, asset_FN.getBase()),
-                                              label2 = asset_file_name)
-            asset_listitem.setArt({'icon' : asset_file_name})
+            asset_listitem = xbmcgui.ListItem(label='Asset_Prefix #{0} "{1}"'.format(image_count, asset_FN.getBase()),
+                                              label2=asset_file_name)
+            asset_listitem.setArt({'icon': asset_file_name})
             listitems_list.append(asset_listitem)
             listitems_asset_paths.append(asset_FN.getPath())
             image_count += 1
@@ -992,13 +997,13 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
             log_debug('listitems_list is empty. Keeping {0} as it was.'.format(AInfo.name))
             continue
         # >> No image
-        asset_listitem = xbmcgui.ListItem(label = 'No image')
-        asset_listitem.setArt({'icon' : 'DefaultAddonNone.png'})
+        asset_listitem = xbmcgui.ListItem(label='No image')
+        asset_listitem.setArt({'icon': 'DefaultAddonNone.png'})
         listitems_list.append(asset_listitem)
         listitems_asset_paths.append('')
 
         title_str = 'Launcher "{0}". Choose {1} file'.format(i_launcher['name'], AInfo.name)
-        ret_idx = xbmcgui.Dialog().select(title_str, list = listitems_list, useDetails = True)
+        ret_idx = xbmcgui.Dialog().select(title_str, list=listitems_list, useDetails=True)
         if ret_idx < 0: return
 
         # >> Set asset field
@@ -1008,7 +1013,7 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
     # >> Rename ROMS JSON/XML only if there is a change in filenames.
     #    Regenerate roms_base_noext and rename old one if necessary.
     old_roms_base_noext = launchers[launcherID]['roms_base_noext']
-    category_name       = categories[categoryID]['m_name'] if categoryID in categories else VCATEGORY_ADDONROOT_ID
+    category_name = categories[categoryID]['m_name'] if categoryID in categories else VCATEGORY_ADDONROOT_ID
     new_roms_base_noext = fs_get_ROMs_basename(category_name, new_launcher_name, launcherID)
     log_debug('old_roms_base_noext "{0}"'.format(old_roms_base_noext))
     log_debug('new_roms_base_noext "{0}"'.format(new_roms_base_noext))
@@ -1018,6 +1023,7 @@ def autoconfig_import_launcher(ROMS_DIR, categories, launchers, categoryID, laun
         fs_rename_ROMs_database(ROMS_DIR, old_roms_base_noext, new_roms_base_noext)
     else:
         log_debug('Not renaming ROM databases (old and new names are equal)')
+
 
 #
 # Search for asset files and return a list of found asset files.

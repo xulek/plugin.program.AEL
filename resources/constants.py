@@ -18,6 +18,7 @@
 # --- Python standard library ---
 from __future__ import unicode_literals
 
+
 # -------------------------------------------------------------------------------------------------
 # A universal addon error reporting exception
 # This exception is raised to report errors in the GUI.
@@ -43,89 +44,91 @@ from __future__ import unicode_literals
 #
 class AddonError(Exception):
     def __init__(self, err_str): self.err_str = err_str
+
     def __str__(self): return self.err_str
 
+
 # This is to ease printing colours in Kodi.
-KC_RED        = '[COLOR red]'
-KC_ORANGE     = '[COLOR orange]'
-KC_GREEN      = '[COLOR green]'
-KC_YELLOW     = '[COLOR yellow]'
-KC_VIOLET     = '[COLOR violet]'
+KC_RED = '[COLOR red]'
+KC_ORANGE = '[COLOR orange]'
+KC_GREEN = '[COLOR green]'
+KC_YELLOW = '[COLOR yellow]'
+KC_VIOLET = '[COLOR violet]'
 KC_BLUEVIOLET = '[COLOR blueviolet]'
-KC_END        = '[/COLOR]'
+KC_END = '[/COLOR]'
 
 # -------------------------------------------------------------------------------------------------
 # Addon constants
 # -------------------------------------------------------------------------------------------------
 # --- Misc "constants" ---
-KIND_CATEGORY    = 1
-KIND_COLLECTION  = 2
-KIND_LAUNCHER    = 3
-KIND_ROM         = 4
+KIND_CATEGORY = 1
+KIND_COLLECTION = 2
+KIND_LAUNCHER = 3
+KIND_ROM = 4
 PLOT_STR_MAXSIZE = 40
 RETROPLAYER_LAUNCHER_APP_NAME = 'retroplayer_launcher_app'
-LNK_LAUNCHER_APP_NAME         = 'lnk_launcher_app'
+LNK_LAUNCHER_APP_NAME = 'lnk_launcher_app'
 
 # --- Special Cateogry/Launcher IDs ---
-VCATEGORY_ADDONROOT_ID   = 'root_category'
-VCATEGORY_FAVOURITES_ID  = 'vcategory_favourites'
+VCATEGORY_ADDONROOT_ID = 'root_category'
+VCATEGORY_FAVOURITES_ID = 'vcategory_favourites'
 VCATEGORY_COLLECTIONS_ID = 'vcategory_collections'
-VCATEGORY_RECENT_ID      = 'vcategory_recent'
+VCATEGORY_RECENT_ID = 'vcategory_recent'
 VCATEGORY_MOST_PLAYED_ID = 'vcategory_most_played'
-VCATEGORY_TITLE_ID       = 'vcategory_title'
-VCATEGORY_YEARS_ID       = 'vcategory_year'
-VCATEGORY_GENRE_ID       = 'vcategory_genre'
-VCATEGORY_DEVELOPER_ID   = 'vcategory_developer'
-VCATEGORY_NPLAYERS_ID    = 'vcategory_nplayer'
-VCATEGORY_ESRB_ID        = 'vcategory_esrb'
-VCATEGORY_RATING_ID      = 'vcategory_rating'
-VCATEGORY_CATEGORY_ID    = 'vcategory_category'
+VCATEGORY_TITLE_ID = 'vcategory_title'
+VCATEGORY_YEARS_ID = 'vcategory_year'
+VCATEGORY_GENRE_ID = 'vcategory_genre'
+VCATEGORY_DEVELOPER_ID = 'vcategory_developer'
+VCATEGORY_NPLAYERS_ID = 'vcategory_nplayer'
+VCATEGORY_ESRB_ID = 'vcategory_esrb'
+VCATEGORY_RATING_ID = 'vcategory_rating'
+VCATEGORY_CATEGORY_ID = 'vcategory_category'
 VCATEGORY_OFF_SCRAPER_ID = 'vcategory_offline_scraper'
-VLAUNCHER_FAVOURITES_ID  = 'vlauncher_favourites'
-VLAUNCHER_RECENT_ID      = 'vlauncher_recent'
+VLAUNCHER_FAVOURITES_ID = 'vlauncher_favourites'
+VLAUNCHER_RECENT_ID = 'vlauncher_recent'
 VLAUNCHER_MOST_PLAYED_ID = 'vlauncher_most_played'
 
 # --- Content type property to be used by skins ---
-AEL_CONTENT_WINDOW_ID          = 10000
-AEL_CONTENT_LABEL              = 'AEL_Content'
-AEL_CONTENT_VALUE_LAUNCHERS    = 'launchers'
-AEL_CONTENT_VALUE_ROMS         = 'roms'
-AEL_CONTENT_VALUE_CATEGORY     = 'category'
+AEL_CONTENT_WINDOW_ID = 10000
+AEL_CONTENT_LABEL = 'AEL_Content'
+AEL_CONTENT_VALUE_LAUNCHERS = 'launchers'
+AEL_CONTENT_VALUE_ROMS = 'roms'
+AEL_CONTENT_VALUE_CATEGORY = 'category'
 AEL_CONTENT_VALUE_STD_LAUNCHER = 'std_launcher'
 AEL_CONTENT_VALUE_ROM_LAUNCHER = 'rom_launcher'
-AEL_CONTENT_VALUE_ROM          = 'rom'
-AEL_CONTENT_VALUE_NONE         = ''
+AEL_CONTENT_VALUE_ROM = 'rom'
+AEL_CONTENT_VALUE_NONE = ''
 
-AEL_LAUNCHER_NAME_LABEL        = 'AEL_Launch_Name'
-AEL_LAUNCHER_ICON_LABEL        = 'AEL_Launch_Icon'
-AEL_LAUNCHER_CLEARLOGO_LABEL   = 'AEL_Launch_Clearlogo'
+AEL_LAUNCHER_NAME_LABEL = 'AEL_Launch_Name'
+AEL_LAUNCHER_ICON_LABEL = 'AEL_Launch_Icon'
+AEL_LAUNCHER_CLEARLOGO_LABEL = 'AEL_Launch_Clearlogo'
 
 # Value is the number of items inside a launcher.
-AEL_NUMITEMS_LABEL             = 'AEL_NumItems'
+AEL_NUMITEMS_LABEL = 'AEL_NumItems'
 
 # --- ROM flags used by skins to display status icons ---
-AEL_INFAV_BOOL_LABEL                 = 'AEL_InFav'
-AEL_INFAV_BOOL_VALUE_TRUE            = 'InFav_True'
-AEL_INFAV_BOOL_VALUE_FALSE           = 'InFav_False'
-AEL_MULTIDISC_BOOL_LABEL             = 'AEL_MultiDisc'
-AEL_MULTIDISC_BOOL_VALUE_TRUE        = 'MultiDisc_True'
-AEL_MULTIDISC_BOOL_VALUE_FALSE       = 'MultiDisc_False'
-AEL_FAV_STAT_LABEL                   = 'AEL_Fav_stat'
-AEL_FAV_STAT_VALUE_OK                = 'Fav_OK'
-AEL_FAV_STAT_VALUE_UNLINKED_ROM      = 'Fav_UnlinkedROM'
+AEL_INFAV_BOOL_LABEL = 'AEL_InFav'
+AEL_INFAV_BOOL_VALUE_TRUE = 'InFav_True'
+AEL_INFAV_BOOL_VALUE_FALSE = 'InFav_False'
+AEL_MULTIDISC_BOOL_LABEL = 'AEL_MultiDisc'
+AEL_MULTIDISC_BOOL_VALUE_TRUE = 'MultiDisc_True'
+AEL_MULTIDISC_BOOL_VALUE_FALSE = 'MultiDisc_False'
+AEL_FAV_STAT_LABEL = 'AEL_Fav_stat'
+AEL_FAV_STAT_VALUE_OK = 'Fav_OK'
+AEL_FAV_STAT_VALUE_UNLINKED_ROM = 'Fav_UnlinkedROM'
 AEL_FAV_STAT_VALUE_UNLINKED_LAUNCHER = 'Fav_UnlinkedLauncher'
-AEL_FAV_STAT_VALUE_BROKEN            = 'Fav_Broken'
-AEL_FAV_STAT_VALUE_NONE              = 'Fav_None'
-AEL_NOINTRO_STAT_LABEL               = 'AEL_NoIntro_stat'
-AEL_NOINTRO_STAT_VALUE_HAVE          = 'NoIntro_Have'
-AEL_NOINTRO_STAT_VALUE_MISS          = 'NoIntro_Miss'
-AEL_NOINTRO_STAT_VALUE_UNKNOWN       = 'NoIntro_Unknown'
-AEL_NOINTRO_STAT_VALUE_EXTRA         = 'NoIntro_Extra'
-AEL_NOINTRO_STAT_VALUE_NONE          = 'NoIntro_None'
-AEL_PCLONE_STAT_LABEL                = 'AEL_PClone_stat'
-AEL_PCLONE_STAT_VALUE_PARENT         = 'PClone_Parent'
-AEL_PCLONE_STAT_VALUE_CLONE          = 'PClone_Clone'
-AEL_PCLONE_STAT_VALUE_NONE           = 'PClone_None'
+AEL_FAV_STAT_VALUE_BROKEN = 'Fav_Broken'
+AEL_FAV_STAT_VALUE_NONE = 'Fav_None'
+AEL_NOINTRO_STAT_LABEL = 'AEL_NoIntro_stat'
+AEL_NOINTRO_STAT_VALUE_HAVE = 'NoIntro_Have'
+AEL_NOINTRO_STAT_VALUE_MISS = 'NoIntro_Miss'
+AEL_NOINTRO_STAT_VALUE_UNKNOWN = 'NoIntro_Unknown'
+AEL_NOINTRO_STAT_VALUE_EXTRA = 'NoIntro_Extra'
+AEL_NOINTRO_STAT_VALUE_NONE = 'NoIntro_None'
+AEL_PCLONE_STAT_LABEL = 'AEL_PClone_stat'
+AEL_PCLONE_STAT_VALUE_PARENT = 'PClone_Parent'
+AEL_PCLONE_STAT_VALUE_CLONE = 'PClone_Clone'
+AEL_PCLONE_STAT_VALUE_NONE = 'PClone_None'
 
 # --- ID of the fake ROM parent of all Unknown ROMs ---
 UNKNOWN_ROMS_PARENT_ID = 'Unknown_ROMs_Parent'
@@ -134,7 +137,7 @@ UNKNOWN_ROMS_PARENT_ID = 'Unknown_ROMs_Parent'
 # Metadata
 # -------------------------------------------------------------------------------------------------
 # launcher['audit_state'] values default AUDIT_STATE_OFF
-AUDIT_STATE_ON  = 'Audit ON'
+AUDIT_STATE_ON = 'Audit ON'
 AUDIT_STATE_OFF = 'Audit OFF'
 AUDIT_STATE_LIST = [
     AUDIT_STATE_ON,
@@ -142,13 +145,13 @@ AUDIT_STATE_LIST = [
 ]
 
 # launcher['audit_display_mode'] values default NOINTRO_DMODE_ALL
-AUDIT_DMODE_ALL       = 'All ROMs'
-AUDIT_DMODE_HAVE      = 'Have ROMs'
-AUDIT_DMODE_HAVE_UNK  = 'Have or Unknown ROMs'
+AUDIT_DMODE_ALL = 'All ROMs'
+AUDIT_DMODE_HAVE = 'Have ROMs'
+AUDIT_DMODE_HAVE_UNK = 'Have or Unknown ROMs'
 AUDIT_DMODE_HAVE_MISS = 'Have or Missing ROMs'
-AUDIT_DMODE_MISS      = 'Missing ROMs'
-AUDIT_DMODE_MISS_UNK  = 'Missing or Unknown ROMs'
-AUDIT_DMODE_UNK       = 'Unknown ROMs'
+AUDIT_DMODE_MISS = 'Missing ROMs'
+AUDIT_DMODE_MISS_UNK = 'Missing or Unknown ROMs'
+AUDIT_DMODE_UNK = 'Unknown ROMs'
 AUDIT_DMODE_LIST = [
     AUDIT_DMODE_ALL,
     AUDIT_DMODE_HAVE,
@@ -160,7 +163,7 @@ AUDIT_DMODE_LIST = [
 ]
 
 # launcher['launcher_display_mode'] values default LAUNCHER_DMODE_FLAT
-LAUNCHER_DMODE_FLAT   = 'Flat mode'
+LAUNCHER_DMODE_FLAT = 'Flat mode'
 LAUNCHER_DMODE_PCLONE = 'Parent/Clone mode'
 LAUNCHER_DMODE_LIST = [
     LAUNCHER_DMODE_FLAT,
@@ -168,11 +171,11 @@ LAUNCHER_DMODE_LIST = [
 ]
 
 # rom['nointro_status'] values default AUDIT_STATUS_NONE
-AUDIT_STATUS_HAVE    = 'Have'
-AUDIT_STATUS_MISS    = 'Miss'
+AUDIT_STATUS_HAVE = 'Have'
+AUDIT_STATUS_MISS = 'Miss'
 AUDIT_STATUS_UNKNOWN = 'Unknown'
-AUDIT_STATUS_EXTRA   = 'Extra'
-AUDIT_STATUS_NONE    = 'None'
+AUDIT_STATUS_EXTRA = 'Extra'
+AUDIT_STATUS_NONE = 'None'
 AUDIT_STATUS_LIST = [
     AUDIT_STATUS_HAVE,
     AUDIT_STATUS_MISS,
@@ -183,8 +186,8 @@ AUDIT_STATUS_LIST = [
 
 # rom['pclone_status'] values default PCLONE_STATUS_NONE
 PCLONE_STATUS_PARENT = 'Parent'
-PCLONE_STATUS_CLONE  = 'Clone'
-PCLONE_STATUS_NONE   = 'None'
+PCLONE_STATUS_CLONE = 'Clone'
+PCLONE_STATUS_NONE = 'None'
 PCLONE_STATUS_LIST = [
     PCLONE_STATUS_PARENT,
     PCLONE_STATUS_CLONE,
@@ -192,12 +195,12 @@ PCLONE_STATUS_LIST = [
 ]
 
 # m_esrb string ESRB_LIST default ESRB_PENDING
-ESRB_PENDING     = 'RP (Rating Pending)'
-ESRB_EARLY       = 'EC (Early Childhood)'
-ESRB_EVERYONE    = 'E (Everyone)'
+ESRB_PENDING = 'RP (Rating Pending)'
+ESRB_EARLY = 'EC (Early Childhood)'
+ESRB_EVERYONE = 'E (Everyone)'
 ESRB_EVERYONE_10 = 'E10+ (Everyone 10+)'
-ESRB_TEEN        = 'T (Teen)'
-ESRB_MATURE      = 'M (Mature)'
+ESRB_TEEN = 'T (Teen)'
+ESRB_MATURE = 'M (Mature)'
 ESRB_ADULTS_ONLY = 'AO (Adults Only)'
 ESRB_LIST = [
     ESRB_PENDING,
@@ -211,17 +214,17 @@ ESRB_LIST = [
 
 # m_nplayers values default ''
 NP_NOT_SET = ''
-NP_1P      = '1P'
-NP_2P_SIM  = '2P sim'
-NP_2P_ALT  = '2P alt'
-NP_3P_SIM  = '3P sim'
-NP_3P_ALT  = '3P alt'
-NP_4P_SIM  = '4P sim'
-NP_4P_ALT  = '4P alt'
-NP_6P_SIM  = '6P sim'
-NP_6P_ALT  = '6P alt'
-NP_8P_SIM  = '8P sim'
-NP_8P_ALT  = '8P alt'
+NP_1P = '1P'
+NP_2P_SIM = '2P sim'
+NP_2P_ALT = '2P alt'
+NP_3P_SIM = '3P sim'
+NP_3P_ALT = '3P alt'
+NP_4P_SIM = '4P sim'
+NP_4P_ALT = '4P alt'
+NP_6P_SIM = '6P sim'
+NP_6P_ALT = '6P alt'
+NP_8P_SIM = '8P sim'
+NP_8P_ALT = '8P alt'
 NPLAYERS_LIST = [
     NP_1P,
     NP_2P_SIM,
@@ -237,46 +240,46 @@ NPLAYERS_LIST = [
 ]
 
 # Use unique string as IDs.
-META_TITLE_ID     = 'title'
-META_YEAR_ID      = 'year'
-META_GENRE_ID     = 'genre'
+META_TITLE_ID = 'title'
+META_YEAR_ID = 'year'
+META_GENRE_ID = 'genre'
 META_DEVELOPER_ID = 'developer'
-META_NPLAYERS_ID  = 'nplayers'
-META_ESRB_ID      = 'esrb'
-META_RATING_ID    = 'rating'
-META_PLOT_ID      = 'plot'
+META_NPLAYERS_ID = 'nplayers'
+META_ESRB_ID = 'esrb'
+META_RATING_ID = 'rating'
+META_PLOT_ID = 'plot'
 
-DEFAULT_META_TITLE     = ''
-DEFAULT_META_YEAR      = ''
-DEFAULT_META_GENRE     = ''
+DEFAULT_META_TITLE = ''
+DEFAULT_META_YEAR = ''
+DEFAULT_META_GENRE = ''
 DEFAULT_META_DEVELOPER = ''
-DEFAULT_META_NPLAYERS  = ''
-DEFAULT_META_ESRB      = ESRB_PENDING
-DEFAULT_META_RATING    = ''
-DEFAULT_META_PLOT      = ''
+DEFAULT_META_NPLAYERS = ''
+DEFAULT_META_ESRB = ESRB_PENDING
+DEFAULT_META_RATING = ''
+DEFAULT_META_PLOT = ''
 
 # -------------------------------------------------------------------------------------------------
 # Assets
 # -------------------------------------------------------------------------------------------------
 # --- Kodi standard artwork types. Mappable to any other artwork type including itself ---
 # # Use unique string as IDs. Then, if asset order changes the IDs are the same.
-ASSET_ICON_ID       = 'icon'
-ASSET_FANART_ID     = 'fanart'
-ASSET_CLEARLOGO_ID  = 'clearlogo'
-ASSET_POSTER_ID     = 'poster'
-ASSET_BANNER_ID     = 'banner' # Marquee in MAME
-ASSET_TRAILER_ID    = 'trailer'
+ASSET_ICON_ID = 'icon'
+ASSET_FANART_ID = 'fanart'
+ASSET_CLEARLOGO_ID = 'clearlogo'
+ASSET_POSTER_ID = 'poster'
+ASSET_BANNER_ID = 'banner'  # Marquee in MAME
+ASSET_TRAILER_ID = 'trailer'
 # --- AEL artwork types ---
 # What about supporting BOXSPINE and composite box (fron, spine and back in one image).
-ASSET_TITLE_ID      = 'title'
-ASSET_SNAP_ID       = 'snap'
-ASSET_BOXFRONT_ID   = 'boxfront'  # Cabinet in MAME
-ASSET_BOXBACK_ID    = 'boxback'   # CPanel in MAME
-ASSET_3DBOX_ID      = '3dbox'
-ASSET_CARTRIDGE_ID  = 'cartridge' # PCB in MAME
-ASSET_FLYER_ID      = 'flyer'
-ASSET_MAP_ID        = 'map'
-ASSET_MANUAL_ID     = 'manual'
+ASSET_TITLE_ID = 'title'
+ASSET_SNAP_ID = 'snap'
+ASSET_BOXFRONT_ID = 'boxfront'  # Cabinet in MAME
+ASSET_BOXBACK_ID = 'boxback'  # CPanel in MAME
+ASSET_3DBOX_ID = '3dbox'
+ASSET_CARTRIDGE_ID = 'cartridge'  # PCB in MAME
+ASSET_FLYER_ID = 'flyer'
+ASSET_MAP_ID = 'map'
+ASSET_MANUAL_ID = 'manual'
 ASSET_CONTROLLER_ID = 'controller'
 
 #
@@ -321,12 +324,12 @@ ROM_ASSET_ID_LIST = [
 # Supported image files in:
 # 1. misc_identify_image_id_by_contents()
 # 2. misc_identify_image_id_by_ext()
-IMAGE_PNG_ID     = 'PNG'
-IMAGE_JPEG_ID    = 'JPEG'
-IMAGE_GIF_ID     = 'GIF'
-IMAGE_BMP_ID     = 'BMP'
-IMAGE_TIFF_ID    = 'TIFF'
-IMAGE_UKNOWN_ID  = 'Image unknown'
+IMAGE_PNG_ID = 'PNG'
+IMAGE_JPEG_ID = 'JPEG'
+IMAGE_GIF_ID = 'GIF'
+IMAGE_BMP_ID = 'BMP'
+IMAGE_TIFF_ID = 'TIFF'
+IMAGE_UKNOWN_ID = 'Image unknown'
 IMAGE_CORRUPT_ID = 'Image corrupt'
 
 IMAGE_IDS = [
@@ -338,17 +341,17 @@ IMAGE_IDS = [
 ]
 
 IMAGE_EXTENSIONS = {
-    IMAGE_PNG_ID  : ['png'],
-    IMAGE_JPEG_ID : ['jpg', 'jpeg'],
-    IMAGE_GIF_ID  : ['gif'],
-    IMAGE_BMP_ID  : ['bmp'],
-    IMAGE_TIFF_ID : ['tif', 'tiff'],
+    IMAGE_PNG_ID: ['png'],
+    IMAGE_JPEG_ID: ['jpg', 'jpeg'],
+    IMAGE_GIF_ID: ['gif'],
+    IMAGE_BMP_ID: ['bmp'],
+    IMAGE_TIFF_ID: ['tif', 'tiff'],
 }
 
 # --- Addon will search these file extensions for assets ---
 # Check http://kodi.wiki/view/advancedsettings.xml#videoextensions
-IMAGE_EXTENSION_LIST   = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tif', 'tiff']
-MANUAL_EXTENSION_LIST  = ['pdf', 'cbz', 'cbr']
+IMAGE_EXTENSION_LIST = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tif', 'tiff']
+MANUAL_EXTENSION_LIST = ['pdf', 'cbz', 'cbr']
 TRAILER_EXTENSION_LIST = ['mov', 'divx', 'xvid', 'wmv', 'avi', 'mpg', 'mpeg', 'mp4', 'mkv', 'avc']
 
 # --- Scrapers -----------------------------------------------------------------------------------
@@ -357,14 +360,14 @@ TRAILER_EXTENSION_LIST = ['mov', 'divx', 'xvid', 'wmv', 'avi', 'mpg', 'mpeg', 'm
 SCRAPER_CACHE_HUMAN_JSON = True
 
 # --- IDs ---
-SCRAPER_NULL_ID          = 10
-SCRAPER_AEL_OFFLINE_ID   = 20
-SCRAPER_THEGAMESDB_ID    = 30
-SCRAPER_MOBYGAMES_ID     = 40
+SCRAPER_NULL_ID = 10
+SCRAPER_AEL_OFFLINE_ID = 20
+SCRAPER_THEGAMESDB_ID = 30
+SCRAPER_MOBYGAMES_ID = 40
 SCRAPER_SCREENSCRAPER_ID = 50
-SCRAPER_GAMEFAQS_ID      = 60 # Disabled at the moment.
-SCRAPER_ARCADEDB_ID      = 70
-SCRAPER_LIBRETRO_ID      = 80 # Not coded yet.
+SCRAPER_GAMEFAQS_ID = 60  # Disabled at the moment.
+SCRAPER_ARCADEDB_ID = 70
+SCRAPER_LIBRETRO_ID = 80  # Not coded yet.
 
 # List of enabled scrapers. If a scraper ID is in this list then a unique scraper object
 # will be instantiated and cached in the global ScraperFactory object.
